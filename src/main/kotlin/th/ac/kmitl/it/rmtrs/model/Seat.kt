@@ -17,8 +17,10 @@ data class Seat(
 ): BaseModel() {
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     lateinit var seatType: SeatType
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     lateinit var  theatre: Theatre
 }
