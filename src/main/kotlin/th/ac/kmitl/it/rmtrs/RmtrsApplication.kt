@@ -31,15 +31,14 @@ class RmtrsApplication(
         seat1.seatType = type1
         seat2.seatType = type1
         listOf(seat1, seat2).forEach { theatre.addSeat(it)}
-        seatTypeRepository.save(type1)
+        val s = seatTypeRepository.save(type1)
         theatreRepository.save(theatre)
+        println(theatreRepository.findAll())
     }
 
     @PreDestroy
     fun destroy() {
-        seatRepository.deleteAll()
-        theatreRepository.deleteAll()
-        seatTypeRepository.deleteAll()
+
     }
 
 }

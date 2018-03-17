@@ -20,10 +20,10 @@ import javax.persistence.MappedSuperclass
 abstract class BaseModel(
         @CreatedDate
         @Column(name = "create_at")
-        var createAt: LocalDateTime? = null,
+        var createAt: LocalDateTime = LocalDateTime.now(),
         @LastModifiedDate
         @Column(name = "update_at")
-        var updateAt: LocalDateTime? = null,
+        var updateAt: LocalDateTime = LocalDateTime.now(),
 
         @Column(name = "is_active")
         var isActive: Boolean = true

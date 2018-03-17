@@ -1,34 +1,32 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
 @Entity
-data class Seat(
+data class Screening(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Long = 0,
 
         @NotNull
-        var row: String = "DEFAULT",
+        var startTime: LocalDateTime? = null
 
-        @NotNull
-        var number: Int = 0
 ): BaseModel() {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    lateinit var seatType: SeatType
+    lateinit var theatre: Theatre
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    lateinit var  theatre: Theatre
+    lateinit var movie: Movie
 
     @OneToMany(
-            mappedBy = "seat",
+            mappedBy = "screening",
             fetch = FetchType.LAZY,
-            cascade = [CascadeType.ALL],
             orphanRemoval = false
     )
-    val tickets: MutableSet<Ticket> = HashSet()
+    val reservations: MutableSet<Reservation> = HashSet()
 }
