@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -15,25 +16,12 @@ import javax.annotation.PreDestroy
 
 @SpringBootApplication
 @EnableJpaAuditing
-class RmtrsApplication(
-        val theatreRepository: TheatreRepository,
-        val seatRepository: SeatRepository,
-        val seatTypeRepository: SeatTypeRepository
-) {
+class RmtrsApplication {
+
 
     @Bean
     fun run() = CommandLineRunner {
-        val theatre = Theatre(name = "AI")
-        val type1 = SeatType(name = "Luxury", price = 300.0, description = "XXXXX")
-        val seat1 = Seat(row = "A", number = 2)
-        val seat2 = Seat(row = "B", number = 3)
 
-        seat1.seatType = type1
-        seat2.seatType = type1
-        listOf(seat1, seat2).forEach { theatre.addSeat(it)}
-        val s = seatTypeRepository.save(type1)
-        theatreRepository.save(theatre)
-        println(theatreRepository.findAll())
     }
 
     @PreDestroy

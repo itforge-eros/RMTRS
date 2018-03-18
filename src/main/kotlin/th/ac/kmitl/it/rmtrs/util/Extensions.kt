@@ -39,6 +39,19 @@ fun GenreRequest.toModel()
 fun ProductionRequest.toModel()
         = Production(name = name)
 
+fun MovieRequest.toModel()
+        = Movie(
+        th_title = th_title,
+        en_title = en_title,
+        synopsis = synopsis,
+        duration = duration,
+        posterUrl = posterUrl,
+        trailerUrl = trailerUrl,
+        releaseDate = releaseDate,
+        endDate = endDate,
+        rate = rate
+)
+
 fun Movie.toResponse()
         = MovieResponse(
         id = this.id,
