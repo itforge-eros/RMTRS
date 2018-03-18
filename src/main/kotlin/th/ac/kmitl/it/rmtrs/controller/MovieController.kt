@@ -14,7 +14,7 @@ class MovieController(val movieService: MovieService) {
 
     @GetMapping("/available")
     fun getAvailableMovies(@RequestParam(value = "date", defaultValue = "none") dateStr: String)
-            : ResponseEntity<Map<String, Any>> {
+            : ResponseEntity<List<Map<String, Any>>> {
         val date = validateDate(dateStr)
         println("Date: $date")
         return movieService.getAllAvailableMoviesWithScreeningAmount(date)

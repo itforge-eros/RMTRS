@@ -4,10 +4,8 @@ import org.springframework.stereotype.Service
 import th.ac.kmitl.it.rmtrs.exception.ResourceNotFoundException
 import th.ac.kmitl.it.rmtrs.model.*
 import th.ac.kmitl.it.rmtrs.payload.*
-import th.ac.kmitl.it.rmtrs.util.toResponse
 import th.ac.kmitl.it.rmtrs.repository.MovieRepository
 import th.ac.kmitl.it.rmtrs.repository.ScreeningRepository
-import th.ac.kmitl.it.rmtrs.util.JSON
 import th.ac.kmitl.it.rmtrs.util.toModel
 import th.ac.kmitl.it.rmtrs.util.toMovieWithDetail
 import java.time.LocalDate
@@ -25,25 +23,28 @@ class MovieService(
 
     val modelName = "Movie"
 
-    fun getAllAvailableMoviesWithScreeningAmount(date: LocalDate): Map<String, Any> {
-        val availableMovies = movieRepository.findAvailableMoviesBetweenEndDateAndReleaseDate(date)
-        println("Available Movies: $availableMovies")
-        val dateProp = "date" to date
-        if (availableMovies.count() == 0) return mapOf(dateProp, "movies" to emptyList<Nothing>())
-        val screeningsMap = screeningRepository //Available Screenings Map: {MovieID=[Screening...]}
-                .findByIdInAndShowDate(availableMovies.map { it.id }, date)
-                .groupBy { it.movie.id }
-        println("Available Screenings Map: $screeningsMap")
-        return availableMovies
+    fun getAllAvailableMoviesWithScreeningAmount(date: LocalDate): List<Map<String, Any>> {
+        val movies = movieRepository
+                .findAvailableMoviesInThatDate(date)
+        if (movies.count() == 0) return emptyList<Nothing>()
+        movies.forEach { it.screenings.filter { it.showDate.isEqual(date) } } // Filter only that date's screening
+        println("Available Movies and Showtime: $movies")
+        return movies
                 .map {
-                    it.toMovieWithDetail().plus("screening_amount" to (screeningsMap[it.id]?.count() ?: 0))
-                }.let { mapOf(dateProp, "movies" to it) }
+                    it.toMovieWithDetail().plus("screening_amount" to it.screenings.count())
+                }
     }
 
     fun getByDate(id: Long, date: LocalDate): Map<String, Any>
-            = movieRepository.findByIdAndDate(id, date)
-            .map { it.toMovieWithDetail().plus("screenings" to it.screenings) }
-            .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
+            = movieRepository.findMovieByMoviesInThatDate(id, date)
+            .map { it.toMovieWithDetail()
+                    .plus("screenings"
+                            to
+                            it.screenings
+                                    .filter { it.showDate.isEqual(date) }
+                                    .filter { it.isActive }
+                    )
+            }.orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
 
     fun add(req: MovieRequest)
             = movieRepository.save(req.toModel().apply {
@@ -67,5 +68,4 @@ class MovieService(
             = movieRepository.findById(id)
             .map { movieRepository.delete(it) }
             .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
-
 }
