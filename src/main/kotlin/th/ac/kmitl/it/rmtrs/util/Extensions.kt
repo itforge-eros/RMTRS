@@ -37,7 +37,7 @@ fun GenreRequest.toModel()
         = Genre(name = name)
 
 fun ProductionRequest.toModel()
-        = ProductionRequest(name = name)
+        = Production(name = name)
 
 fun Movie.toResponse()
         = MovieResponse(
