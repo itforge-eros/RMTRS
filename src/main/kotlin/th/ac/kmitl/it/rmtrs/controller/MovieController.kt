@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.controller
 
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import th.ac.kmitl.it.rmtrs.payload.AvailableMoviesByDate
@@ -26,5 +27,11 @@ class MovieController(val movieService: MovieService) {
     @PostMapping
     fun add(@Valid @RequestBody req: MovieRequest)
             = ResponseEntity.ok().body(movieService.add(req))
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable("id") id: Long): ResponseEntity<Void> {
+        movieService.delete(id)
+        return ResponseEntity(HttpStatus.OK)
+    }
 
 }

@@ -32,13 +32,14 @@ class MovieService(
     fun getAllAvailableMoviesWithScreeningAmount(date: LocalDate): AvailableMoviesByDate {
         val availableMovies = movieRepository.findAvailableMoviesBetweenEndDateAndReleaseDate(date)
         println("Available Movies: $availableMovies")
+        if (availableMovies.count() == 0) return AvailableMoviesByDate(date, listOf())
         val screeningsMap = screeningRepository //Available Screenings Map: {MovieID=[Screening...]}
                 .findByIdInAndShowDate(availableMovies.map { it.id }, date)
                 .groupBy { it.movie.id }
         println("Available Screenings Map: $screeningsMap")
         return availableMovies
                 .map { it.toResponse() }
-                .map { EntityWithAmountOf(it, mapOf("screening" to (screeningsMap.get(it.id)?.count() ?: -1))) }
+                .map { EntityWithAmountOf(it, mapOf("screening" to (screeningsMap[it.id]?.count() ?: 0))) }
                 .let { AvailableMoviesByDate(date, it) }
     }
 
