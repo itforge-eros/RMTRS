@@ -15,6 +15,9 @@ import javax.validation.Valid
 @RequestMapping("/genre")
 class GenreController(val service: GenreService) {
 
+    @GetMapping
+    fun getAll() = service.getAll()
+
     @GetMapping("/{id}")
     fun get(@PathVariable("id") id: Long)
             = ResponseEntity.ok(service.get(id))

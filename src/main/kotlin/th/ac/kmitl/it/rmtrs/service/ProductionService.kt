@@ -14,6 +14,8 @@ class ProductionService(val repository: ProductionRepository) {
 
     val modelName = "Production"
 
+    fun getAll() = repository.findAll().map { it.toResponse() }
+
     fun get(id: Long)
             = repository.findById(id)
             .map { it.toResponse() }

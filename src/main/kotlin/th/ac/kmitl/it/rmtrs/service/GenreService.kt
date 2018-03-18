@@ -14,6 +14,8 @@ class GenreService(val repository: GenreRepository) {
 
     val modelName = "Genre"
 
+    fun getAll() = repository.findAll().map { it.toResponse() }
+
     fun get(id: Long)
             = repository.findById(id)
             .map { it.toResponse() }

@@ -12,6 +12,8 @@ class ActorService(val repository: ActorRepository) {
 
     val modelName = "Actor"
 
+    fun getAll() = repository.findAll().map { it.toResponse() }
+
     fun get(id: Long)
             = repository.findById(id)
             .map { it.toResponse() }

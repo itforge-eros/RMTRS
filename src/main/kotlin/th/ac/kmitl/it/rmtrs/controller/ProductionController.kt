@@ -16,6 +16,9 @@ import javax.validation.Valid
 @RequestMapping("/production")
 class ProductionController(val service: ProductionService) {
 
+    @GetMapping
+    fun getAll() = service.getAll()
+
     @GetMapping("/{id}")
     fun get(@PathVariable("id") id: Long)
             = ResponseEntity.ok(service.get(id))

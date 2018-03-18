@@ -12,6 +12,8 @@ class DirectorService(val repository: DirectorRepository) {
 
     val modelName = "Director"
 
+    fun getAll() = repository.findAll().map { it.toResponse() }
+
     fun get(id: Long)
             = repository.findById(id)
             .map { it.toResponse() }

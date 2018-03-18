@@ -15,6 +15,9 @@ import javax.validation.Valid
 @RequestMapping("/director")
 class DirectorController(val service: DirectorService) {
 
+    @GetMapping
+    fun getAll() = service.getAll()
+
     @GetMapping("/{id}")
     fun get(@PathVariable("id") id: Long)
             = ResponseEntity.ok(service.get(id))
