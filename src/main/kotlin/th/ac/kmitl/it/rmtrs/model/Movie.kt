@@ -1,7 +1,11 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import org.hibernate.annotations.SQLDelete
 import th.ac.kmitl.it.rmtrs.definition.Rate
+import th.ac.kmitl.it.rmtrs.util.LocalDateToString
 import java.time.LocalDate
 import java.util.*
 import javax.persistence.*
@@ -28,21 +32,28 @@ data class Movie(
         var duration: Int = 0,
 
         @NotNull
+        @JsonProperty("poster_url")
         var posterUrl: String = "default",
 
         @NotNull
+        @JsonProperty("trailer_url")
         var trailerUrl: String = "default",
 
         @NotNull
+        @JsonSerialize(using = LocalDateToString::class)
+        @JsonProperty("release_date")
         var releaseDate: LocalDate = LocalDate.now(),
 
         @NotNull
+        @JsonSerialize(using = LocalDateToString::class)
+        @JsonProperty("end_date")
         var endDate: LocalDate = LocalDate.now(),
 
         @NotNull
         var rate: Rate = Rate.G
 ): BaseModel() {
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinTable(
             name = "movie_director",
@@ -51,6 +62,7 @@ data class Movie(
     )
     val directors: MutableSet<Director> = HashSet()
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinTable(
             name = "movie_actor",
@@ -59,6 +71,7 @@ data class Movie(
     )
     val actors: MutableSet<Actor> = HashSet()
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinTable(
             name = "movie_genre",
@@ -67,6 +80,7 @@ data class Movie(
     )
     val genres: MutableSet<Genre> = HashSet()
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinTable(
             name = "movie_production",
@@ -75,6 +89,7 @@ data class Movie(
     )
     val productions: MutableSet<Production> = HashSet()
 
+    @JsonIgnore
     @OneToMany(
             mappedBy = "movie",
             fetch = FetchType.EAGER,

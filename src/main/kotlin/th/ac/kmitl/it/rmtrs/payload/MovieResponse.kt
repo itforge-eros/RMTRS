@@ -12,11 +12,10 @@ data class MovieResponse(
         var duration: Int = 0,
         var posterUrl: String = "default",
         var trailerUrl: String = "default",
-        var releaseDate: LocalDate = LocalDate.now(),
-        var endDate: LocalDate = LocalDate.now(),
+        var releaseDate: String,
+        var endDate: String,
         var rate: Rate = Rate.G,
-        var actors: List<ActorResponse>,
-        var genres: List<GenreResponse>,
-        var productions: List<ProductionResponse>,
-        var directors: List<DirectorResponse>
+        var createAt: String,
+        var updateAt: String,
+        var isActive: Boolean
 )

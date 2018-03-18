@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.SQLDelete
 import javax.persistence.*
 import javax.validation.constraints.NotNull
@@ -21,6 +22,7 @@ data class Director(
         var lname: String = "default"
 ): BaseModel() {
 
+    @JsonIgnore
     @ManyToMany(
             fetch = FetchType.EAGER,
             cascade = [CascadeType.PERSIST, CascadeType.MERGE],

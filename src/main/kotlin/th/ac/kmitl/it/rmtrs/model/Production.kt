@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.SQLDelete
 import th.ac.kmitl.it.rmtrs.payload.ProductionResponse
 import javax.persistence.*
@@ -16,6 +17,7 @@ data class Production(
         var name: String = "default"
 ): BaseModel() {
 
+    @JsonIgnore
     @ManyToMany(
             fetch = FetchType.EAGER,
             cascade = [CascadeType.PERSIST, CascadeType.MERGE],
