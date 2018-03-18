@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import th.ac.kmitl.it.rmtrs.payload.ProductionResponse
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
@@ -20,3 +21,6 @@ data class Production(
     )
     val movies: MutableSet<Movie> = HashSet()
 }
+
+fun Production.toResponse()
+        = ProductionResponse(id, name)

@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import th.ac.kmitl.it.rmtrs.payload.ActorResponse
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
@@ -25,3 +26,6 @@ data class Actor(
     )
     val movies: MutableSet<Movie> = HashSet()
 }
+
+fun Actor.toResponse()
+        = ActorResponse(id, fname, mname, lname)

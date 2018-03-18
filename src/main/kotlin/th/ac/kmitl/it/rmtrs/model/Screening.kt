@@ -1,6 +1,8 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
@@ -11,7 +13,9 @@ data class Screening(
         var id: Long = 0,
 
         @NotNull
-        var startTime: LocalDateTime? = null
+        var showDate: LocalDate = LocalDate.now(),
+
+        var showTime: LocalDateTime = LocalDateTime.now()
 
 ): BaseModel() {
 
