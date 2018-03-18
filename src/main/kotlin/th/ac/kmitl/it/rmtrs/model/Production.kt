@@ -21,6 +21,3 @@ data class Production(
     )
     val movies: MutableSet<Movie> = HashSet()
 }
-
-fun Production.toResponse()
-        = ProductionResponse(id, name)

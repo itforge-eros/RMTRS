@@ -26,6 +26,3 @@ data class Actor(
     )
     val movies: MutableSet<Movie> = HashSet()
 }
-
-fun Actor.toResponse()
-        = ActorResponse(id, fname, mname, lname)

@@ -1,6 +1,5 @@
 package th.ac.kmitl.it.rmtrs.model
 
-import th.ac.kmitl.it.rmtrs.payload.DirectorResponse
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
@@ -27,6 +26,3 @@ data class Director(
     )
     val movies: MutableSet<Movie> = HashSet()
 }
-
-fun Director.toResponse()
-        = DirectorResponse(id, fname, mname, lname)

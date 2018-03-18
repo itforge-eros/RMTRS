@@ -1,9 +1,7 @@
 package th.ac.kmitl.it.rmtrs.model
 
 import th.ac.kmitl.it.rmtrs.definition.Rate
-import th.ac.kmitl.it.rmtrs.payload.MovieResponse
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotNull
@@ -83,21 +81,3 @@ data class Movie(
     )
     val screenings: MutableSet<Screening> = HashSet()
 }
-
-fun Movie.toResponse()
-        = MovieResponse(
-        id = this.id,
-        th_title = this.th_title,
-        en_title = this.en_title,
-        synopsis = this.synopsis,
-        duration = this.duration,
-        posterUrl = this.posterUrl,
-        trailerUrl = this.trailerUrl,
-        releaseDate = this.releaseDate,
-        endDate = this.endDate,
-        rate = this.rate,
-        actors = this.actors.map { it.toResponse() },
-        genres = this.genres.map { it.toResponse() },
-        productions = this.productions.map { it.toResponse() },
-        directors = this.directors.map { it.toResponse() }
-)

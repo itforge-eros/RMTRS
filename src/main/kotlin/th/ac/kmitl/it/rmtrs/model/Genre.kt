@@ -1,6 +1,5 @@
 package th.ac.kmitl.it.rmtrs.model
 
-import th.ac.kmitl.it.rmtrs.payload.GenreResponse
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
@@ -21,6 +20,3 @@ data class Genre(
     )
     val movies: MutableSet<Movie> = HashSet()
 }
-
-fun Genre.toResponse()
-        = GenreResponse(id, name)
