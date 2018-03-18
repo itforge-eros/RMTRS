@@ -1,9 +1,11 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import org.hibernate.annotations.SQLDelete
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
 @Entity
+@SQLDelete(sql = "UPDATE genre SET is_active = false WHERE id = ?")
 data class Genre(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

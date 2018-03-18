@@ -10,13 +10,13 @@ import javax.persistence.Column
 import javax.persistence.EntityListeners
 import javax.persistence.MappedSuperclass
 
+@Where(clause = "is_active = true")
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
 @JsonIgnoreProperties(
         value = ["createdAt", "updatedAt"],
         allowGetters = true
 )
-@Where(clause = "is_active=1")
 abstract class BaseModel(
         @CreatedDate
         @Column(name = "create_at")

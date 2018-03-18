@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import org.hibernate.annotations.SQLDelete
 import th.ac.kmitl.it.rmtrs.definition.Role
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -7,6 +8,7 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
+@SQLDelete(sql = "UPDATE employee SET is_active = false WHERE id = ?")
 data class Employee(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

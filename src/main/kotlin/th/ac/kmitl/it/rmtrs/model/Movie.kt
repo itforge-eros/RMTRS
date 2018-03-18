@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import org.hibernate.annotations.SQLDelete
 import th.ac.kmitl.it.rmtrs.definition.Rate
 import java.time.LocalDate
 import java.util.*
@@ -7,6 +8,7 @@ import javax.persistence.*
 import javax.validation.constraints.NotNull
 
 @Entity
+@SQLDelete(sql = "UPDATE movie SET is_active = false WHERE id = ?")
 data class Movie(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

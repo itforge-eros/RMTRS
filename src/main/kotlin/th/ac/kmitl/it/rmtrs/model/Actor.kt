@@ -1,9 +1,12 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Where
 import th.ac.kmitl.it.rmtrs.payload.ActorResponse
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
+@SQLDelete(sql = "UPDATE actor SET is_active = false WHERE id = ?")
 @Entity
 data class Actor(
         @Id
