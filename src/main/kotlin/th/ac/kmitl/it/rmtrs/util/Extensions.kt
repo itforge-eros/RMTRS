@@ -51,3 +51,13 @@ fun MovieRequest.toModel()
         endDate = endDate,
         rate = rate
 )
+
+@Suppress("UNCHECKED_CAST")
+fun Movie.toMovieWithDetail(): Map<String, Any>
+        = JSON.toResponseMap(this)
+        .plus(mapOf(
+                "actors" to actors,
+                "directors" to directors,
+                "genres" to genres,
+                "productions" to productions
+        )) as Map<String, Any>

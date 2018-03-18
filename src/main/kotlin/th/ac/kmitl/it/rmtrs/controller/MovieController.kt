@@ -5,8 +5,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import th.ac.kmitl.it.rmtrs.payload.MovieRequest
 import th.ac.kmitl.it.rmtrs.service.MovieService
-import th.ac.kmitl.it.rmtrs.util.toLocalDate
-import java.time.LocalDate
+import th.ac.kmitl.it.rmtrs.util.validateDate
 import javax.validation.Valid
 
 @RestController
@@ -16,12 +15,20 @@ class MovieController(val movieService: MovieService) {
     @GetMapping("/available")
     fun getAvailableMovies(@RequestParam(value = "date", defaultValue = "none") dateStr: String)
             : ResponseEntity<Map<String, Any>> {
-        val date = if(dateStr == "none") LocalDate.now() else dateStr.toLocalDate()
+        val date = validateDate(dateStr)
         println("Date: $date")
         return movieService.getAllAvailableMoviesWithScreeningAmount(date)
                 .let { ResponseEntity.ok(it) }
     }
 
+    @GetMapping("/{id}")
+    fun get(
+            @PathVariable("id") id: Long,
+            @RequestParam(value = "date", defaultValue = "none") dateStr: String
+    ): ResponseEntity<Map<String, Any>> {
+        val date = validateDate(dateStr)
+        return ResponseEntity.ok(movieService.getByDate(id, date))
+    }
     @PostMapping
     fun add(@Valid @RequestBody req: MovieRequest)
             = ResponseEntity.ok().body(movieService.add(req))

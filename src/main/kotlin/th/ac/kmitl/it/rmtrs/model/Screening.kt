@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.SQLDelete
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -21,14 +22,17 @@ data class Screening(
 
 ): BaseModel() {
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(nullable = false)
     lateinit var theatre: Theatre
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(nullable = false)
     lateinit var movie: Movie
 
+    @JsonIgnore
     @OneToMany(
             mappedBy = "screening",
             fetch = FetchType.LAZY,

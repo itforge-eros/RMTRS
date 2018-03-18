@@ -18,4 +18,7 @@ interface MovieRepository: JpaRepository<Movie, Long> {
 
     @Query("SELECT m FROM Movie m WHERE :date BETWEEN m.releaseDate AND m.endDate AND m.isActive = 1")
     fun findAvailableMoviesBetweenEndDateAndReleaseDate(@Param("date") date: LocalDate): List<Movie>
+
+    @Query("SELECT m FROM Movie m WHERE m.id = :id AND :date BETWEEN m.releaseDate AND m.endDate AND m.isActive = 1")
+    fun findByIdAndDate(@Param("id") id: Long, @Param("date") date: LocalDate): Optional<Movie>
 }
