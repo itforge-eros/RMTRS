@@ -1,16 +1,9 @@
 language: java
 jdk:
 - oraclejdk8
-sudo: required
-services:
-  - docker
-env:
-  global:
-  - secure: LF3AL5sdvrNLE4cMPUlAx1AFlH6jYYf9U3d+tMfm1KMqEr3vkREBzB811LZX9Jq0/5PdoWWdd5jmzo/UH96YaAatPIsu+1uDRBONTVDVIuXP0QKnb7ZYg2cdZ+5CRBynTbwfw3C3+CwUQ9W4gwUhIlEWh15TxDrNtiuLwrYCcfPUo5+fdWIl/32GPqpp9cNfbWd62T2jxpArJOEmxZmN/6LX4m/ZQKbqXrH2wM7l4MqryXX/Qsm81fGdpE0JgWdcDGk/pIFqyYyNXFpkIdDTMWN99I6EeHNgBE3FRg2nKlMOJAS45SuujKnhG6nlv7lunM5Plv3mIGhIiTOhKksVjlG8bBeEg9twv+Kjks3bcdMbf9HtpubAgExQfasOPy7kvRkCJ8ZocOTOlA9noO/vck+BC3baYH4uwrL6BQT5rIAZTHCxznl4YRxTth3vpiYd0xdBMc+jgtcg4/gZ6XUOCH+a8uC05e2DKDFgAahYg8gE6yUiqYkUFNvHKe01Ijuh4uPNOQqrih3k5edxlrwLhG7qZTJI9mYKcm3BmNzanrZNSQMGBbQx88TrslmqZStzZSdaEnwnyVXd96gaZY1FvwcKgSOeuvsWeMVxt0Hl2LYJfC8Be+DBe9WUzk+wTPP6+pwOuDOErMyEEELBsK322Wcr+RbuP7h4nNyWj5mCH0A=
-  - secure: JJmuYttqA3JBznnXKJ/O3UiHtHIqFkTq81kVAxq8qkOZg6Any7HjU/yjsGajJK+rmPw+8mK2hwUz8iG63JYIVj96QIOiaESAgl79n1STqEmqRv3SWXYVeZbmajuJIVmVzFfUkTN2fH8kgsE6hRs1LXSSWp8joVC6YHVYza6GrLPGnS8fmj3klg9F6PT9T6Hs0eINv7TzYqtDyL3qtiUFZCy/3AMDqCkO7+BJQk049LjSzTHRCYyPN5o2sVA2UvJHc5hVAjE/SwRLR3spPWyCFe6ukBhe3m0fOaZ2xTo5aW2cEb/YC0Ab1lWcFVRxWG4tsl/ETiGqlu5ki10NqJvvQnzOGC33ZLMSsRGtfLqDF1ubricsfiVOrBPEBhaWP4UiHRqkhtk8v4fjaoKolcAjbyuKCHBvIStHHRnRlmb8rDBNRjv6RCUmSb0Whb0yfdN6aiML6tDZ3dfAGU/4I1AqfnMJKRhw1ZpjejBvxykNUFp+xQOjaYuCWMU4P9NwKOmkqZXMkdfK5gGLTv2OMVazMwLsZN1Qj+jk6xuwbHgY+z1Kz4LUkGJw+rvZHTeFnkBcjFuC6T87jghtlZuU026+AwCjZPdo69ySpEj1ubmhSmeA8TjlDqlY/CfR0DVa7o8ciklPEWwSCdr7ZIKay+qAHhK+mVmnCPVNvwODfkVMmNw=
 script:
 - gradle check
-- gradle build
+- gradle test
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -19,10 +12,3 @@ cache:
   directories:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
-after_success:
-- docker login -u $DOCKER_USER -p $DOCKER_PASS
-- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
-- export IMAGE_NAME=xiikjiix/rmtrs
-- docker build -t $IMAGE_NAME:$COMMIT .
-- docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
-- docker push $IMAGE_NAME
