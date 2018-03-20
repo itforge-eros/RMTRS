@@ -1,5 +1,10 @@
 package th.ac.kmitl.it.rmtrs
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -17,7 +22,6 @@ import javax.annotation.PreDestroy
 @SpringBootApplication
 @EnableJpaAuditing
 class RmtrsApplication {
-
 
     @Bean
     fun run() = CommandLineRunner {

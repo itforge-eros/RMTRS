@@ -52,6 +52,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-validation')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile group: 'com.fasterxml.jackson.module', name: 'jackson-modules-java8', version: '2.9.4', ext: 'pom'
+	compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
 	compile('com.fasterxml.jackson.module:jackson-module-kotlin')
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	compile("org.jetbrains.kotlin:kotlin-reflect")

@@ -17,6 +17,6 @@ class LocalDateTimeToString @JvmOverloads constructor(t: Class<LocalDateTime>? =
     }
 
     companion object {
-        private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
+        private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
     }
 }

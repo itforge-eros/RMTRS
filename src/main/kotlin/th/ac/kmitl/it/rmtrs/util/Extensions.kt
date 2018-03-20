@@ -6,6 +6,7 @@ import java.io.InputStream
 import java.security.DigestInputStream
 import java.security.MessageDigest
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 fun InputStream.sha1()
@@ -52,6 +53,9 @@ fun MovieRequest.toModel()
         rate = rate
 )
 
+fun ScreeningRequest.toModel()
+        = Screening(showDate = showDate, showTime = showTime)
+
 @Suppress("UNCHECKED_CAST")
 fun Movie.toMovieWithDetail(): Map<String, Any>
         = JSON.toResponseMap(this)
@@ -61,3 +65,11 @@ fun Movie.toMovieWithDetail(): Map<String, Any>
                 "genres" to genres,
                 "productions" to productions
         )) as Map<String, Any>
+
+@Suppress("UNCHECKED_CAST")
+fun Screening.toScreeningWithDetail(): Map<String, Any>
+        = JSON.toResponseMap(this)
+        .plus(mapOf("theatre_id" to theatre.id, "movie" to movie)) as Map<String, Any>
+
+fun isOverlap(start1: LocalDateTime, start2: LocalDateTime, end1: LocalDateTime, end2: LocalDateTime): Boolean
+        = maxOf(start1, start2).isBefore(minOf(end1, end2))
