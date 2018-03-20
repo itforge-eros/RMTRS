@@ -24,7 +24,7 @@ class MovieService(val movieRepository: MovieRepository) {
         val movies = movieRepository
                 .findAvailableMoviesInThatDate(date)
         if (movies.count() == 0) return emptyList<Nothing>()
-        movies.forEach { it.screenings.filter { it.showDate.isEqual(date) and it.isActive } } // Filter only that date's screening
+        movies.forEach { it.screenings.removeIf { !it.isActive } } // Filter only that date's screening
         println("Available Movies and Showtime: $movies")
         return movies.map { it.toMovieWithDetail().plus("screening_amount" to it.screenings.count()) }
     }
@@ -32,7 +32,7 @@ class MovieService(val movieRepository: MovieRepository) {
     fun getByDate(id: Long, date: LocalDate): Map<String, Any>
             = movieRepository.findMovieByMoviesInThatDate(id, date)
             .map { it.toMovieWithDetail()
-                    .plus("screenings" to it.screenings.filter { it.showDate.isEqual(date) and it.isActive })
+                    .plus("screenings" to it.screenings.removeIf { !it.isActive })
             }.orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
 
     fun add(req: MovieRequest)
