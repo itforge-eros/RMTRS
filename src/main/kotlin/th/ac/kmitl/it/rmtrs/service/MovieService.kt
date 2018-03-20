@@ -13,10 +13,7 @@ import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
 @Service
-class MovieService(
-        val movieRepository: MovieRepository,
-        val screeningRepository: ScreeningRepository
-) {
+class MovieService(val movieRepository: MovieRepository) {
 
     @PersistenceContext
     lateinit var em: EntityManager
@@ -27,23 +24,15 @@ class MovieService(
         val movies = movieRepository
                 .findAvailableMoviesInThatDate(date)
         if (movies.count() == 0) return emptyList<Nothing>()
-        movies.forEach { it.screenings.filter { it.showDate.isEqual(date) } } // Filter only that date's screening
+        movies.forEach { it.screenings.filter { it.showDate.isEqual(date) and it.isActive } } // Filter only that date's screening
         println("Available Movies and Showtime: $movies")
-        return movies
-                .map {
-                    it.toMovieWithDetail().plus("screening_amount" to it.screenings.count())
-                }
+        return movies.map { it.toMovieWithDetail().plus("screening_amount" to it.screenings.count()) }
     }
 
     fun getByDate(id: Long, date: LocalDate): Map<String, Any>
             = movieRepository.findMovieByMoviesInThatDate(id, date)
             .map { it.toMovieWithDetail()
-                    .plus("screenings"
-                            to
-                            it.screenings
-                                    .filter { it.showDate.isEqual(date) }
-                                    .filter { it.isActive }
-                    )
+                    .plus("screenings" to it.screenings.filter { it.showDate.isEqual(date) and it.isActive })
             }.orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
 
     fun add(req: MovieRequest)
@@ -59,9 +48,7 @@ class MovieService(
             .map {
                 req.toModel()
                         .apply { this.id = it.id }
-                        .let {
-                            movieRepository.save(it).toMovieWithDetail()
-                        }
+                        .let { movieRepository.save(it).toMovieWithDetail() }
             }.orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
 
     fun delete(id: Long)
