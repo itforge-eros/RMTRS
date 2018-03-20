@@ -6,7 +6,6 @@ import javax.persistence.*
 import javax.validation.constraints.NotNull
 
 @Entity
-@SQLDelete(sql = "UPDATE seat SET is_active = false WHERE id = ?")
 data class Seat(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

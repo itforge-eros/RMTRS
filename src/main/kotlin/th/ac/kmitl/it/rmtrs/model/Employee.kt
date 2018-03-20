@@ -8,7 +8,6 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
-@SQLDelete(sql = "UPDATE employee SET is_active = false WHERE id = ?")
 data class Employee(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

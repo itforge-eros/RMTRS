@@ -53,6 +53,6 @@ class MovieService(val movieRepository: MovieRepository) {
 
     fun delete(id: Long)
             = movieRepository.findById(id)
-            .map { movieRepository.delete(it) }
+            .map { movieRepository.softDelete(it.id) }
             .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
 }

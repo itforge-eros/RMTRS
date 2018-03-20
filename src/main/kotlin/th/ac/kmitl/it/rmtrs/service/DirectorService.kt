@@ -35,7 +35,7 @@ class DirectorService(val repository: DirectorRepository) {
 
     fun delete(id: Long)
             = repository.findById(id)
-            .map { repository.delete(it) }
+            .map { repository.softDelete(it.id) }
             .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
 
 }

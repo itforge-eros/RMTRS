@@ -13,7 +13,6 @@ import javax.persistence.*
 import javax.validation.constraints.NotNull
 
 @Entity
-@SQLDelete(sql = "UPDATE movie SET is_active = false WHERE id = ?")
 data class Movie(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

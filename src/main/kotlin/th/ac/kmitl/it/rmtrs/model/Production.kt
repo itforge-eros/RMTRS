@@ -8,7 +8,6 @@ import javax.persistence.*
 import javax.validation.constraints.NotNull
 
 @Entity
-@SQLDelete(sql = "UPDATE production SET is_active = false WHERE id = ?")
 data class Production(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
