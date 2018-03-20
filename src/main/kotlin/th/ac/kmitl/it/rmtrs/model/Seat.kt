@@ -1,6 +1,7 @@
 package th.ac.kmitl.it.rmtrs.model
 
 import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Where
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
@@ -18,12 +19,14 @@ data class Seat(
         var number: Int = 0
 ): BaseModel() {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
+    @Where(clause = "is_active = true")
     lateinit var seatType: SeatType
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @Where(clause = "is_active = true")
     lateinit var  theatre: Theatre
 
     @OneToMany(
@@ -32,5 +35,6 @@ data class Seat(
             cascade = [CascadeType.ALL],
             orphanRemoval = false
     )
+    @Where(clause = "is_active = true")
     val tickets: MutableSet<Ticket> = HashSet()
 }

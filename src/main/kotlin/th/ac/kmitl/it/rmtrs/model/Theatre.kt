@@ -1,6 +1,7 @@
 package th.ac.kmitl.it.rmtrs.model
 
 import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Where
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
@@ -22,6 +23,7 @@ data class Theatre(
             fetch = FetchType.EAGER,
             orphanRemoval = true
     )
+    @Where(clause = "is_active = true")
     val seats: MutableSet<Seat> = HashSet()
 
     fun addSeat(seat: Seat) {

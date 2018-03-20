@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Where
 import th.ac.kmitl.it.rmtrs.definition.Rate
 import th.ac.kmitl.it.rmtrs.util.LocalDateToString
 import java.time.LocalDate
@@ -60,6 +61,7 @@ data class Movie(
             joinColumns = [JoinColumn(name = "movie_id")],
             inverseJoinColumns = [JoinColumn(name = "director_id")]
     )
+    @Where(clause = "is_active = true")
     val directors: MutableSet<Director> = HashSet()
 
     @JsonIgnore
@@ -69,6 +71,7 @@ data class Movie(
             joinColumns = [JoinColumn(name = "movie_id")],
             inverseJoinColumns = [JoinColumn(name = "actor_id")]
     )
+    @Where(clause = "is_active = true")
     val actors: MutableSet<Actor> = HashSet()
 
     @JsonIgnore
@@ -78,6 +81,7 @@ data class Movie(
             joinColumns = [JoinColumn(name = "movie_id")],
             inverseJoinColumns = [JoinColumn(name = "genre_id")]
     )
+    @Where(clause = "is_active = true")
     val genres: MutableSet<Genre> = HashSet()
 
     @JsonIgnore
@@ -87,6 +91,7 @@ data class Movie(
             joinColumns = [JoinColumn(name = "movie_id")],
             inverseJoinColumns = [JoinColumn(name = "production_id")]
     )
+    @Where(clause = "is_active = true")
     val productions: MutableSet<Production> = HashSet()
 
     @JsonIgnore
@@ -96,5 +101,6 @@ data class Movie(
             cascade = [CascadeType.MERGE, CascadeType.PERSIST],
             orphanRemoval = false
     )
-    val screenings: MutableSet<Screening> = HashSet()
+    @Where(clause = "is_active = true")
+    var screenings: MutableSet<Screening> = HashSet()
 }

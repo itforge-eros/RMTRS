@@ -1,6 +1,7 @@
 package th.ac.kmitl.it.rmtrs.model
 
 import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Where
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
@@ -15,11 +16,13 @@ data class Ticket(
         var itemNo: Int = 1
 ): BaseModel() {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
+    @Where(clause = "is_active = true")
     lateinit var reservation: Reservation
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
+    @Where(clause = "is_active = true")
     lateinit var seat: Seat
 }

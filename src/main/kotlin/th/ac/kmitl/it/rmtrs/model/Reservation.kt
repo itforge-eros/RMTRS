@@ -1,6 +1,7 @@
 package th.ac.kmitl.it.rmtrs.model
 
 import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Where
 import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.NotNull
@@ -15,7 +16,7 @@ data class Reservation(
         @NotNull
         var isCheckedIn: Boolean = false,
 
-        var checkedIntime: LocalDateTime? = null,
+        var checkedInTime: LocalDateTime? = null,
 
         @NotNull
         var reservedTime: LocalDateTime? = null
@@ -31,5 +32,6 @@ data class Reservation(
             cascade = [CascadeType.ALL],
             orphanRemoval = false
     )
+    @Where(clause = "is_active = true")
     val tickets: MutableSet<Ticket> = HashSet()
 }

@@ -2,6 +2,7 @@ package th.ac.kmitl.it.rmtrs.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Where
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -23,13 +24,15 @@ data class Screening(
 ): BaseModel() {
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
+    @Where(clause = "is_active = true")
     lateinit var theatre: Theatre
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
+    @Where(clause = "is_active = true")
     lateinit var movie: Movie
 
     @JsonIgnore
@@ -38,5 +41,6 @@ data class Screening(
             fetch = FetchType.LAZY,
             orphanRemoval = false
     )
+    @Where(clause = "is_active = true")
     val reservations: MutableSet<Reservation> = HashSet()
 }

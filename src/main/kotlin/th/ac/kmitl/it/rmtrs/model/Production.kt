@@ -2,6 +2,7 @@ package th.ac.kmitl.it.rmtrs.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Where
 import th.ac.kmitl.it.rmtrs.payload.ProductionResponse
 import javax.persistence.*
 import javax.validation.constraints.NotNull
