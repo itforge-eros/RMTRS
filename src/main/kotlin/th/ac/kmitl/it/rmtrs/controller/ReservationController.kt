@@ -23,8 +23,5 @@ class ReservationController(val reservationService: ReservationService) {
 
     @GetMapping("checkin/{id}")
     fun checkIn(@PathParam("id") id: Long)
-            =
-
-
-
+            = reservationService.checkIn(id)
 }
