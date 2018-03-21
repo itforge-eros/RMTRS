@@ -5,7 +5,6 @@ import th.ac.kmitl.it.rmtrs.exception.ResourceNotFoundException
 import th.ac.kmitl.it.rmtrs.model.*
 import th.ac.kmitl.it.rmtrs.payload.*
 import th.ac.kmitl.it.rmtrs.repository.MovieRepository
-import th.ac.kmitl.it.rmtrs.repository.ScreeningRepository
 import th.ac.kmitl.it.rmtrs.util.toModel
 import th.ac.kmitl.it.rmtrs.util.toMovieWithDetail
 import java.time.LocalDate
@@ -43,16 +42,20 @@ class MovieService(val movieRepository: MovieRepository) {
                 req.productions.forEach { id -> this.productions.add(em.getReference(Production::class.java, id)) }
             }).toMovieWithDetail()
 
-    fun update(req: MovieRequest, id: Long)
-            = movieRepository.findById(id)
-            .map {
-                req.toModel()
-                        .apply { this.id = it.id }
-                        .let { movieRepository.save(it).toMovieWithDetail() }
-            }.orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
+    fun update(req: MovieRequest, id: Long) {
+        val movie = checkIfExisted(id)
+        return req.toModel()
+                .apply { this.id = movie.id }
+                .let { movieRepository.save(it).toMovieWithDetail() }
+    }
 
     fun delete(id: Long)
             = movieRepository.findById(id)
             .map { movieRepository.softDelete(it.id) }
             .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
+
+    fun checkIfExisted(id: Long)
+            = movieRepository
+            .findById(id)
+            .orElseThrow { ResourceNotFoundException("Movie id: ${id} not found.") }
 }

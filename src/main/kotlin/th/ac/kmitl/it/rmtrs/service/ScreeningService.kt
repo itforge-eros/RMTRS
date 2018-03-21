@@ -19,7 +19,7 @@ import javax.persistence.PersistenceContext
 @Service
 class ScreeningService(
         val screeningRepository: ScreeningRepository,
-        val movieRepository: MovieRepository
+        val movieService: MovieService
 ) {
 
     @PersistenceContext
@@ -34,10 +34,7 @@ class ScreeningService(
             .map { it.toScreeningWithDetail() }
 
     fun get(id: Long)
-            = screeningRepository
-            .findById(id)
-            .map { it.toScreeningWithDetail() }
-            .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
+            = checkIfExisted(id).toScreeningWithDetail()
 
     fun add(req: ScreeningRequest): Map<String, Any> {
         val movie = validateScreeningConflict(req)
@@ -51,27 +48,22 @@ class ScreeningService(
 
     fun update(req: ScreeningRequest, id: Long): Map<String, Any> {
         validateScreeningConflict(req)
-        val screening = screeningRepository
-                .findById(id)
-                .map {
-                    req.toModel()
-                        .apply { this.id = it.id }
-                        .let {
-                            it.movie = em.getReference(Movie::class.java, req.movieId)
-                            it.theatre = em.getReference(Theatre::class.java, req.theatreId)
-                            screeningRepository.save(it)
-                        } }
-                .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
+        val screening = checkIfExisted(id)
+        req.toModel()
+                .apply { this.id = screening.id }
+                .let {
+                    it.movie = em.getReference(Movie::class.java, req.movieId)
+                    it.theatre = em.getReference(Theatre::class.java, req.theatreId)
+                    screeningRepository.save(it)
+                }
         return screening.toScreeningWithDetail()
     }
 
     fun delete(id: Long)
-            = screeningRepository.findById(id)
-            .map { screeningRepository.softDelete(it.id) }
-            .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
+            = checkIfExisted(id).let { screeningRepository.softDelete(id) }
 
     private fun validateScreeningConflict(req: ScreeningRequest): Movie {
-        val movie = movieRepository.findById(req.movieId).orElseThrow { ResourceNotFoundException("Movie id: ${req.movieId} not found.") }
+        val movie = movieService.checkIfExisted(req.movieId)
         val allScreeningsInTheatre = screeningRepository.findAllByTheatreId(req.theatreId, req.showDate)
         allScreeningsInTheatre
                 .sortedBy { it.showTime }
@@ -84,4 +76,8 @@ class ScreeningService(
                 }
         return movie
     }
+
+    fun checkIfExisted(id: Long)
+            = screeningRepository.findById(id)
+            .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
 }

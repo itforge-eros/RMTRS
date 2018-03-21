@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
 import javax.persistence.*
@@ -29,5 +30,6 @@ data class SeatType(
             orphanRemoval = false
     )
     @Where(clause = "is_active = true")
+    @JsonIgnore
     val seats: MutableSet<Seat> = HashSet()
 }

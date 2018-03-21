@@ -71,5 +71,10 @@ fun Screening.toScreeningWithDetail(): Map<String, Any>
         = JSON.toResponseMap(this)
         .plus(mapOf("theatre_id" to theatre.id, "movie" to movie)) as Map<String, Any>
 
+@Suppress("UNCHECKED_CAST")
+fun Reservation.toReservationWithDetail(): Map<String, Any>
+        = JSON.toResponseMap(this)
+        .plus("tickets" to this.tickets) as Map<String, Any>
+
 fun isOverlap(start1: LocalDateTime, start2: LocalDateTime, end1: LocalDateTime, end2: LocalDateTime): Boolean
         = maxOf(start1, start2).isBefore(minOf(end1, end2))

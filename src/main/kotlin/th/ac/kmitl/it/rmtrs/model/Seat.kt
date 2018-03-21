@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
 import javax.persistence.*
@@ -26,6 +27,7 @@ data class Seat(
     @ManyToOne
     @JoinColumn(nullable = false)
     @Where(clause = "is_active = true")
+    @JsonIgnore
     lateinit var  theatre: Theatre
 
     @OneToMany(
@@ -35,5 +37,6 @@ data class Seat(
             orphanRemoval = false
     )
     @Where(clause = "is_active = true")
+    @JsonIgnore
     val tickets: MutableSet<Ticket> = HashSet()
 }

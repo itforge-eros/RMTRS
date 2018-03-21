@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
 import javax.persistence.*
@@ -18,6 +19,7 @@ data class Ticket(
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     @Where(clause = "is_active = true")
+    @JsonIgnore
     lateinit var reservation: Reservation
 
     @ManyToOne(fetch = FetchType.EAGER)
