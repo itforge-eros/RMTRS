@@ -32,8 +32,8 @@ class ScreeningController(val screeningService: ScreeningService) {
     }
 
     @PutMapping("/{id}")
-    fun update(@Valid @RequestBody req: ScreeningRequest, @PathVariable("id") id: Long): Map<String, Any> {
-        return screeningService.update(req, id)
+    fun update(@Valid @RequestBody req: ScreeningRequest, @PathVariable("id") id: Long): ResponseEntity<Map<String, Any>> {
+        return ResponseEntity.ok(screeningService.update(req, id))
     }
 
     @DeleteMapping("/{id}")
