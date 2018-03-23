@@ -16,7 +16,8 @@ import javax.persistence.PersistenceContext
 class ReservationService(
         val reservationRepository: ReservationRepository,
         val screeningService: ScreeningService,
-        val seatService: SeatService
+        val seatService: SeatService,
+        val firebaseService: FirebaseService
 ) {
 
     val modelName = "Reservation"
@@ -28,6 +29,7 @@ class ReservationService(
             val ticket = Ticket(itemNo = it.itemNo)
             ticket.reservation = reservation
             ticket.seat = seatService.checkIfExisted(it.seatId)
+            firebaseService.reserveSeat(screeningId = screening.id, seatId = ticket.seat.id)
             ticket
         }
 

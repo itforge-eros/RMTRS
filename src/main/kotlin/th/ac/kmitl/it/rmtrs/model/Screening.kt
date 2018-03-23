@@ -1,6 +1,7 @@
 package th.ac.kmitl.it.rmtrs.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
@@ -20,9 +21,11 @@ data class Screening(
 
         @NotNull
         @JsonSerialize(using = LocalDateToString::class)
+        @JsonProperty("show_date")
         var showDate: LocalDate = LocalDate.now(),
 
         @JsonSerialize(using = LocalDateTimeToString::class)
+        @JsonProperty("show_time")
         var showTime: LocalDateTime = LocalDateTime.now()
 
 ): BaseModel() {
