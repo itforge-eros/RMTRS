@@ -19,7 +19,8 @@ import javax.persistence.PersistenceContext
 @Service
 class ScreeningService(
         val screeningRepository: ScreeningRepository,
-        val movieService: MovieService
+        val movieService: MovieService,
+        val firebaseService: FirebaseService
 ) {
 
     @PersistenceContext
@@ -43,16 +44,18 @@ class ScreeningService(
                     this.movie = movie
                     this.theatre = em.getReference(Theatre::class.java, req.theatreId)
                 }
-        return screeningRepository.save(screening).toScreeningWithDetail()
+        return screeningRepository.save(screening)
+                .also { firebaseService.createAvailableSeats(screeningId = it.id, seatIds = it.theatre.seats.map { it.id }) }
+                .toScreeningWithDetail()
     }
 
     fun update(req: ScreeningRequest, id: Long): Map<String, Any> {
-        validateScreeningConflict(req)
+        val movie = validateScreeningConflict(req)
         val screening = checkIfExisted(id)
         req.toModel()
                 .apply { this.id = screening.id }
                 .let {
-                    it.movie = em.getReference(Movie::class.java, req.movieId)
+                    it.movie = movie
                     it.theatre = em.getReference(Theatre::class.java, req.theatreId)
                     screeningRepository.save(it)
                 }
