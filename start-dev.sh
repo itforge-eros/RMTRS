@@ -1,2 +1,2 @@
 #!/bin/bash
-docker start minio-dev mysql-dev
+docker start mysql-dev

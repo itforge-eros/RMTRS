@@ -63,6 +63,7 @@ dependencies {
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('mysql:mysql-connector-java')
 	testCompile group: 'com.h2database', name: 'h2', version: '1.4.197'
+	compile 'com.google.firebase:firebase-admin:5.9.0'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
 }
