@@ -41,6 +41,7 @@ class ReservationService(
             = reservationRepository.findById(id)
             .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
 
+
     fun checkIn(id: Long): Map<String, Any> {
         val reservation = checkIfExisted(id)
         reservation.isCheckedIn = true

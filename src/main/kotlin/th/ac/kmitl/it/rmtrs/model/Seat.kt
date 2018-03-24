@@ -1,6 +1,7 @@
 package th.ac.kmitl.it.rmtrs.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
 import javax.persistence.*
@@ -22,6 +23,7 @@ data class Seat(
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     @Where(clause = "is_active = true")
+    @JsonProperty("seat_type")
     lateinit var seatType: SeatType
 
     @ManyToOne

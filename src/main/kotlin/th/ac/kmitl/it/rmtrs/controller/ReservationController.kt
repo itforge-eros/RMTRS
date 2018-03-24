@@ -6,7 +6,6 @@ import th.ac.kmitl.it.rmtrs.payload.ReservationRequest
 import th.ac.kmitl.it.rmtrs.service.ReservationService
 import th.ac.kmitl.it.rmtrs.util.toReservationWithDetail
 import javax.validation.Valid
-import javax.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/reserve")
@@ -18,10 +17,10 @@ class ReservationController(val reservationService: ReservationService) {
     }
 
     @GetMapping("/{id}")
-    fun get(@PathParam("id") id: Long)
-            = reservationService.checkIfExisted(id).toReservationWithDetail()
+    fun get(@PathVariable("id") id: Long)
+            = ResponseEntity.ok(reservationService.checkIfExisted(id).toReservationWithDetail())
 
     @GetMapping("checkin/{id}")
-    fun checkIn(@PathParam("id") id: Long)
+    fun checkIn(@PathVariable("id") id: Long)
             = reservationService.checkIn(id)
 }
