@@ -3,14 +3,11 @@ package th.ac.kmitl.it.rmtrs.service
 import org.springframework.stereotype.Service
 import th.ac.kmitl.it.rmtrs.exception.ResourceNotFoundException
 import th.ac.kmitl.it.rmtrs.model.Reservation
-import th.ac.kmitl.it.rmtrs.model.Screening
 import th.ac.kmitl.it.rmtrs.model.Ticket
 import th.ac.kmitl.it.rmtrs.payload.ReservationRequest
 import th.ac.kmitl.it.rmtrs.repository.ReservationRepository
 import th.ac.kmitl.it.rmtrs.util.toReservationWithDetail
 import java.time.LocalDateTime
-import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
 
 @Service
 class ReservationService(
@@ -29,10 +26,9 @@ class ReservationService(
             val ticket = Ticket(itemNo = it.itemNo)
             ticket.reservation = reservation
             ticket.seat = seatService.checkIfExisted(it.seatId)
-            firebaseService.reserveSeat(screeningId = screening.id, seatId = ticket.seat.id)
+            firebaseService.pushReserved(screeningId = screening.id, seatId = ticket.seat.id)
             ticket
         }
-
         reservation.tickets.addAll(tickets)
         return reservationRepository.save(reservation).toReservationWithDetail()
     }
