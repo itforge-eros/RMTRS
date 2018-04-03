@@ -19,7 +19,8 @@ import javax.persistence.PersistenceContext
 @Service
 class ScreeningService(
         val screeningRepository: ScreeningRepository,
-        val movieService: MovieService
+        val movieService: MovieService,
+        val firebaseService: FirebaseService
 ) {
 
     @PersistenceContext
@@ -44,6 +45,7 @@ class ScreeningService(
                     this.theatre = em.getReference(Theatre::class.java, req.theatreId)
                 }
         return screeningRepository.save(screening)
+                .also { firebaseService.createScreening(screeningId = it.id) }
                 .toScreeningWithDetail()
     }
 

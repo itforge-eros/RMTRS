@@ -10,4 +10,11 @@ class FirebaseService(val ref: DatabaseReference) {
         ref.child("$screeningId/reservedList")
                 .push().setValueAsync(seatId)
     }
+
+    fun createScreening(screeningId: Long) {
+        ref.child("$screeningId")
+                .setValueAsync(mapOf("reservedList" to listOf(0)))
+        ref.child("$screeningId")
+                .setValueAsync(mapOf("selectedList" to listOf(0)))
+    }
 }
