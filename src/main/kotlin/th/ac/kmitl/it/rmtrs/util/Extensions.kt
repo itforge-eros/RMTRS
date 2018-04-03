@@ -9,10 +9,11 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun InputStream.sha1()
-        = MessageDigest.getInstance("SHA-1")
-        .let { DigestInputStream(this, it).messageDigest.digest() }
-        .fold("") {str, byte -> str + "%02x".format(byte)}
+fun String.sha1()
+        = MessageDigest
+        .getInstance("SHA-1")
+        .digest(this.toByteArray())
+        .fold("") { str, byte -> str + "%02x".format(byte) }
 
 fun String.toLocalDate() = LocalDate.parse(this, DateTimeFormatter.ISO_LOCAL_DATE)
 
@@ -55,6 +56,16 @@ fun MovieRequest.toModel()
 
 fun ScreeningRequest.toModel()
         = Screening(showDate = showDate, showTime = showTime)
+
+fun AccountRequest.toModel()
+        = Account(
+        username = username,
+        password = password.sha1(),
+        title = title,
+        fname = fname,
+        lname = lname,
+        phone = phone
+)
 
 @Suppress("UNCHECKED_CAST")
 fun Movie.toMovieWithDetail(): Map<String, Any>
