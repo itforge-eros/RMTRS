@@ -1,5 +1,7 @@
 package th.ac.kmitl.it.rmtrs.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import th.ac.kmitl.it.rmtrs.definition.Role
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -28,5 +30,8 @@ data class Account(
         var lname: String = "default",
 
         @NotNull
-        var phone: String = "default"
+        var phone: String = "default",
+
+        @NotNull
+        var role: Role
 ): BaseModel()

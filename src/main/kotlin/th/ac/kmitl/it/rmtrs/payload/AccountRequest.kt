@@ -1,6 +1,8 @@
 package th.ac.kmitl.it.rmtrs.payload
 
+import th.ac.kmitl.it.rmtrs.definition.Role
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 data class AccountRequest(
 
@@ -19,5 +21,8 @@ data class AccountRequest(
         var lname: String = "default",
 
         @field:NotBlank
-        var phone: String = "default"
+        var phone: String = "default",
+
+        @field:NotNull
+        var role: Role
 )

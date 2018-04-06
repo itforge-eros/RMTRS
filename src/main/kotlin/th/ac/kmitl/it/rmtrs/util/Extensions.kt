@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.util
 
+import th.ac.kmitl.it.rmtrs.definition.Role
 import th.ac.kmitl.it.rmtrs.model.*
 import th.ac.kmitl.it.rmtrs.payload.*
 import java.io.InputStream
@@ -64,7 +65,8 @@ fun AccountRequest.toModel()
         title = title,
         fname = fname,
         lname = lname,
-        phone = phone
+        phone = phone,
+        role = role
 )
 
 @Suppress("UNCHECKED_CAST")
