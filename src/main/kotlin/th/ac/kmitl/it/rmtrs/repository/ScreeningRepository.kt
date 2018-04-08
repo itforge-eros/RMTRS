@@ -12,9 +12,9 @@ import javax.transaction.Transactional
 @Repository
 interface ScreeningRepository: JpaRepository<Screening, Long> {
 
-    @Query("SELECT sc FROM Screening sc WHERE sc.movie.id IN :movieIds AND sc.showDate = :date AND sc.isActive = 1")
-    fun findByMovieIdsInAndShowDate(
-            @Param("movieIds")movieIds: List<Long>,
+    @Query("SELECT sc FROM Screening sc WHERE sc.movie.id = :movieId AND sc.showDate = :date AND sc.isActive = 1")
+    fun findByMovieIdAndShowDate(
+            @Param("movieId")movieId: Long,
             @Param("date")date: LocalDate
     ): List<Screening>
 

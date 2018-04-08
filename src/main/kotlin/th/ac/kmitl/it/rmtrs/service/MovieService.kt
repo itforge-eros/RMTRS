@@ -30,9 +30,8 @@ class MovieService(val movieRepository: MovieRepository) {
 
     fun getByDate(id: Long, date: LocalDate): Map<String, Any>
             = movieRepository.findMovieByMoviesInThatDate(id, date)
-            .map { it.toMovieWithDetail()
-                    .plus("screenings" to it.screenings.removeIf { !it.isActive })
-            }.orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
+            .map { it.toMovieWithDetail() }
+            .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
 
     fun add(req: MovieRequest)
             = movieRepository.save(req.toModel().apply {

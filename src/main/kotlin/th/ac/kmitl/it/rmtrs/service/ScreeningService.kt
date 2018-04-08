@@ -6,12 +6,8 @@ import th.ac.kmitl.it.rmtrs.exception.ScreeningTimeConflict
 import th.ac.kmitl.it.rmtrs.model.Movie
 import th.ac.kmitl.it.rmtrs.model.Theatre
 import th.ac.kmitl.it.rmtrs.payload.ScreeningRequest
-import th.ac.kmitl.it.rmtrs.repository.MovieRepository
 import th.ac.kmitl.it.rmtrs.repository.ScreeningRepository
-import th.ac.kmitl.it.rmtrs.util.isOverlap
-import th.ac.kmitl.it.rmtrs.util.toModel
-import th.ac.kmitl.it.rmtrs.util.toResponse
-import th.ac.kmitl.it.rmtrs.util.toScreeningWithDetail
+import th.ac.kmitl.it.rmtrs.util.*
 import java.time.LocalDate
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
@@ -28,12 +24,11 @@ class ScreeningService(
 
     val modelName = "Screening"
 
-    fun getScreeningsByMovieIdsAndDate(movieIds: List<Long>, date: LocalDate)
+    fun getScreeningsByMovieIdsAndDate(movieId: Long, date: LocalDate)
             = screeningRepository
-            .findByMovieIdsInAndShowDate(movieIds, date)
-            .filter { it.showDate.isEqual(date) }
-            .map { it.toScreeningWithDetail() }
-
+            .findByMovieIdAndShowDate(movieId, date)
+            .groupBy { it.theatre }
+            .map { (theatre, screenings) -> mapOf("theatre" to theatre.withoutSeats(), "screenings" to screenings) }
     fun get(id: Long)
             = checkIfExisted(id).toScreeningWithDetail()
 

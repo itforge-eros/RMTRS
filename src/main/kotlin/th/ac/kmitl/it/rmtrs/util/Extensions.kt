@@ -94,6 +94,9 @@ fun Theatre.toTheatreWithDetail(): Map<String, Any>
         = JSON.toResponseMap(this)
         .plus("seats" to seats) as Map<String, Any>
 
+fun Theatre.withoutSeats(): TheatreWithoutSeats
+        = TheatreWithoutSeats(id, name)
+
 @Suppress("UNCHECKED_CAST")
 fun SeatType.toSeatTypeWithDetail(): Map<String, Any>
         = JSON.toResponseMap(this) as Map<String, Any>

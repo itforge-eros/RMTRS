@@ -3,6 +3,8 @@ package th.ac.kmitl.it.rmtrs.controller
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import th.ac.kmitl.it.rmtrs.model.Screening
+import th.ac.kmitl.it.rmtrs.model.Theatre
 import th.ac.kmitl.it.rmtrs.payload.ScreeningRequest
 import th.ac.kmitl.it.rmtrs.service.ScreeningService
 import th.ac.kmitl.it.rmtrs.util.validateDate
@@ -15,11 +17,11 @@ class ScreeningController(val screeningService: ScreeningService) {
     @GetMapping("")
     fun getAvailableScreening(
             @RequestParam(value = "date", defaultValue = "none") dateStr: String,
-            @RequestParam("movies") movieIdsStr: String
+            @RequestParam("movie") movieIdsStr: String
     ): ResponseEntity<List<Map<String, Any>>> {
         val date = validateDate(dateStr)
-        val movieIds = movieIdsStr.split(",").map { it.toLong() }
-        return screeningService.getScreeningsByMovieIdsAndDate(movieIds, date)
+        val movieId = movieIdsStr.toLong()
+        return screeningService.getScreeningsByMovieIdsAndDate(movieId, date)
                 .let { ResponseEntity.ok(it) }
     }
 
