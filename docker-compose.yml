@@ -1,0 +1,37 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=my-secret-pw
+      - MYSQL_DATABASE=rmtrs
+    ports:
+      - 3306:3306
+    networks:
+      - rmtrs
+
+  rmtrs-app:
+    image: xiikjiix/rmtrs:1.0
+    ports:
+      - 8888:8888
+    depends_on:
+      - db
+    networks:
+      - rmtrs
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:4.7
+    environment:
+      - PMA_HOST=db
+    ports:
+      - 9999:80
+    depends_on:
+      - db
+    networks:
+      - rmtrs
+
+networks:
+  rmtrs:
+    driver: bridge
