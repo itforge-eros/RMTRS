@@ -2,6 +2,8 @@ package th.ac.kmitl.it.rmtrs.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import th.ac.kmitl.it.rmtrs.model.Movie
+import th.ac.kmitl.it.rmtrs.payload.PagedResponse
 import th.ac.kmitl.it.rmtrs.payload.ReservationRequest
 import th.ac.kmitl.it.rmtrs.service.ReservationService
 import th.ac.kmitl.it.rmtrs.util.toReservationWithDetail
@@ -23,4 +25,9 @@ class ReservationController(val reservationService: ReservationService) {
     @GetMapping("checkin/{id}")
     fun checkIn(@PathVariable("id") id: Long)
             = reservationService.checkIn(id)
+
+    @GetMapping("paged")
+    fun getPagedMovies(@RequestParam(value = "page", defaultValue = "0") page: Int): ResponseEntity<PagedResponse<Map<String, Any>>> {
+        return ResponseEntity.ok(reservationService.getPaged(page, PagedResponse.PAGE_SIZE))
+    }
 }

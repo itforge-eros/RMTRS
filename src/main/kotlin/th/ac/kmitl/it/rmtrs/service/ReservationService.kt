@@ -1,11 +1,16 @@
 package th.ac.kmitl.it.rmtrs.service
 
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import th.ac.kmitl.it.rmtrs.exception.ResourceNotFoundException
+import th.ac.kmitl.it.rmtrs.model.Movie
 import th.ac.kmitl.it.rmtrs.model.Reservation
 import th.ac.kmitl.it.rmtrs.model.Ticket
+import th.ac.kmitl.it.rmtrs.payload.PagedResponse
 import th.ac.kmitl.it.rmtrs.payload.ReservationRequest
 import th.ac.kmitl.it.rmtrs.repository.ReservationRepository
+import th.ac.kmitl.it.rmtrs.util.toPagedResponse
 import th.ac.kmitl.it.rmtrs.util.toReservationWithDetail
 import java.time.LocalDateTime
 
@@ -43,5 +48,11 @@ class ReservationService(
         reservation.isCheckedIn = true
         reservation.checkedInTime = LocalDateTime.now()
         return reservationRepository.save(reservation).toReservationWithDetail()
+    }
+
+    fun getPaged(page: Int, size: Int): PagedResponse<Map<String, Any>> {
+        val pagedRes = PageRequest.of(page, size, Sort.Direction.DESC, "createAt")
+                .let { reservationRepository.findAll(it) }
+        return toPagedResponse(pagedRes, pagedRes.content.map { it.toReservationWithDetail() })
     }
 }
