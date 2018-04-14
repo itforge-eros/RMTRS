@@ -6,9 +6,8 @@ import th.ac.kmitl.it.rmtrs.payload.Links
 import th.ac.kmitl.it.rmtrs.payload.PagedResponse
 import th.ac.kmitl.it.rmtrs.payload.Pagination
 
-fun <T> toPagedResponse(paged: Page<T>): PagedResponse<T> {
+fun <T, R> toPagedResponse(paged: Page<T>, data: List<R>): PagedResponse<R> {
 
-    val data = paged.content
     val nextPageUrl = when {
         paged.number == paged.totalPages - 1 -> null
         paged.number == 0 && paged.totalElements.toInt() == paged.numberOfElements -> null
@@ -37,5 +36,5 @@ fun <T> toPagedResponse(paged: Page<T>): PagedResponse<T> {
             prevPageUrl = prevPageUrl
     ))
 
-    return PagedResponse<T>(links = links, data = data)
+    return PagedResponse<R>(links = links, data = data)
 }

@@ -66,6 +66,6 @@ class MovieService(val movieRepository: MovieRepository) {
     fun getPaged(page: Int, size: Int): PagedResponse<Movie> {
         val pagedRes = PageRequest.of(page, size, Sort.Direction.DESC, "createAt")
                 .let { movieRepository.findAll(it) }
-        return toPagedResponse(pagedRes)
+        return toPagedResponse(pagedRes, pagedRes.content)
     }
 }

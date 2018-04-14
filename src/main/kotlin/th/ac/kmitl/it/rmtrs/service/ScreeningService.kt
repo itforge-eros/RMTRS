@@ -1,10 +1,15 @@
 package th.ac.kmitl.it.rmtrs.service
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import th.ac.kmitl.it.rmtrs.exception.ResourceNotFoundException
 import th.ac.kmitl.it.rmtrs.exception.ScreeningTimeConflict
 import th.ac.kmitl.it.rmtrs.model.Movie
+import th.ac.kmitl.it.rmtrs.model.Screening
 import th.ac.kmitl.it.rmtrs.model.Theatre
+import th.ac.kmitl.it.rmtrs.payload.PagedResponse
 import th.ac.kmitl.it.rmtrs.payload.ScreeningRequest
 import th.ac.kmitl.it.rmtrs.repository.ScreeningRepository
 import th.ac.kmitl.it.rmtrs.util.*
@@ -78,4 +83,11 @@ class ScreeningService(
     fun checkIfExisted(id: Long)
             = screeningRepository.findById(id)
             .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
+
+    fun getPaged(page: Int, size: Int): PagedResponse<Map<String, Any>> {
+        val pagedRes = PageRequest.of(page, size, Sort.Direction.DESC, "createAt")
+                .let { screeningRepository.findAll(it) }
+
+        return toPagedResponse(pagedRes, pagedRes.content.map { it.toScreeningWithDetail() })
+    }
 }

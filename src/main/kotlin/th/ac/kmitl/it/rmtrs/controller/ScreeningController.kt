@@ -3,8 +3,10 @@ package th.ac.kmitl.it.rmtrs.controller
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import th.ac.kmitl.it.rmtrs.model.Movie
 import th.ac.kmitl.it.rmtrs.model.Screening
 import th.ac.kmitl.it.rmtrs.model.Theatre
+import th.ac.kmitl.it.rmtrs.payload.PagedResponse
 import th.ac.kmitl.it.rmtrs.payload.ScreeningRequest
 import th.ac.kmitl.it.rmtrs.service.ScreeningService
 import th.ac.kmitl.it.rmtrs.util.validateDate
@@ -42,6 +44,11 @@ class ScreeningController(val screeningService: ScreeningService) {
     fun delete(@PathVariable("id") id: Long): ResponseEntity<Void> {
         screeningService.delete(id)
         return ResponseEntity(HttpStatus.OK)
+    }
+
+    @GetMapping("paged")
+    fun getPagedMovies(@RequestParam(value = "page", defaultValue = "0") page: Int): ResponseEntity<PagedResponse<Map<String, Any>>> {
+        return ResponseEntity.ok(screeningService.getPaged(page, PagedResponse.PAGE_SIZE))
     }
 
 }
