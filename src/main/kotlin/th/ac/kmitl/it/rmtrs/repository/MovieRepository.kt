@@ -28,4 +28,7 @@ interface MovieRepository: JpaRepository<Movie, Long> {
     @Modifying
     @Query("UPDATE Movie SET isActive = false WHERE id = :id")
     fun softDelete(@Param("id") id: Long)
+
+    @Query("SELECT m FROM Movie m WHERE m.isActive = 1")
+    override fun findAll(pageable: Pageable): Page<Movie>
 }

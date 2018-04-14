@@ -11,9 +11,9 @@ data class Pagination(
         @JsonProperty("last_page")
         var lastPage: Int,
         @JsonProperty("next_page_url")
-        var nextPageUrl: Int,
+        var nextPageUrl: String?,
         @JsonProperty("prev_page_url")
-        var prevPageUrl: Int,
+        var prevPageUrl: String?,
         var from: Int,
         var to: Int
 )

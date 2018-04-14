@@ -1,12 +1,17 @@
 package th.ac.kmitl.it.rmtrs.service
 
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import org.springframework.web.util.UriComponentsBuilder
 import th.ac.kmitl.it.rmtrs.exception.ResourceNotFoundException
 import th.ac.kmitl.it.rmtrs.model.*
 import th.ac.kmitl.it.rmtrs.payload.*
 import th.ac.kmitl.it.rmtrs.repository.MovieRepository
 import th.ac.kmitl.it.rmtrs.util.toModel
 import th.ac.kmitl.it.rmtrs.util.toMovieWithDetail
+import th.ac.kmitl.it.rmtrs.util.toPagedResponse
 import java.time.LocalDate
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
@@ -57,4 +62,10 @@ class MovieService(val movieRepository: MovieRepository) {
             = movieRepository
             .findById(id)
             .orElseThrow { ResourceNotFoundException("Movie id: ${id} not found.") }
+
+    fun getPaged(page: Int, size: Int): PagedResponse<Movie> {
+        val pagedRes = PageRequest.of(page, size, Sort.Direction.DESC, "createAt")
+                .let { movieRepository.findAll(it) }
+        return toPagedResponse(pagedRes)
+    }
 }
