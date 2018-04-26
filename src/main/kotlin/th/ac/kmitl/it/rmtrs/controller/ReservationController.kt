@@ -27,7 +27,7 @@ class ReservationController(val reservationService: ReservationService) {
             = reservationService.checkIn(id)
 
     @GetMapping("paged")
-    fun getPagedMovies(@RequestParam(value = "page", defaultValue = "0") page: Int): ResponseEntity<PagedResponse<Map<String, Any>>> {
+    fun getPaged(@RequestParam(value = "page", defaultValue = "0") page: Int): ResponseEntity<PagedResponse<Map<String, Any>>> {
         return ResponseEntity.ok(reservationService.getPaged(page, PagedResponse.PAGE_SIZE))
     }
 }

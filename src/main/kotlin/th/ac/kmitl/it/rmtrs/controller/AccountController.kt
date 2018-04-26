@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*
 import th.ac.kmitl.it.rmtrs.model.Account
 import th.ac.kmitl.it.rmtrs.payload.AccountRequest
 import th.ac.kmitl.it.rmtrs.payload.LoginRequest
+import th.ac.kmitl.it.rmtrs.payload.PagedResponse
 import th.ac.kmitl.it.rmtrs.service.AccountService
 import javax.validation.Valid
 
@@ -35,4 +36,9 @@ class AccountController(val accountService: AccountService) {
     @GetMapping("/{id}")
     fun get(@PathVariable("id") id: Long)
             = ResponseEntity.ok(accountService.checkIfExisted(id).apply { password = "--------" })
+
+    @GetMapping("paged")
+    fun getPaged(@RequestParam(value = "page", defaultValue = "0") page: Int): ResponseEntity<PagedResponse<Account>> {
+        return ResponseEntity.ok(accountService.getPaged(page, PagedResponse.PAGE_SIZE))
+    }
 }

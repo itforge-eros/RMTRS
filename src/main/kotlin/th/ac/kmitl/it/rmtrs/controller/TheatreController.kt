@@ -33,7 +33,7 @@ class TheatreController(val theatreService: TheatreService) {
     }
 
     @GetMapping("paged")
-    fun getPagedMovies(@RequestParam(value = "page", defaultValue = "0") page: Int): ResponseEntity<PagedResponse<Map<String, Any>>> {
+    fun getPaged(@RequestParam(value = "page", defaultValue = "0") page: Int): ResponseEntity<PagedResponse<Map<String, Any>>> {
         return ResponseEntity.ok(theatreService.getPaged(page, PagedResponse.PAGE_SIZE))
     }
 }

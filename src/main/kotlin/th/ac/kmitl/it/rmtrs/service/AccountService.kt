@@ -1,14 +1,19 @@
 package th.ac.kmitl.it.rmtrs.service
 
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import th.ac.kmitl.it.rmtrs.exception.ResourceNotFoundException
 import th.ac.kmitl.it.rmtrs.exception.UsernameConflict
 import th.ac.kmitl.it.rmtrs.model.Account
 import th.ac.kmitl.it.rmtrs.payload.AccountRequest
 import th.ac.kmitl.it.rmtrs.payload.LoginRequest
+import th.ac.kmitl.it.rmtrs.payload.PagedResponse
 import th.ac.kmitl.it.rmtrs.repository.AccountRepository
 import th.ac.kmitl.it.rmtrs.util.sha1
 import th.ac.kmitl.it.rmtrs.util.toModel
+import th.ac.kmitl.it.rmtrs.util.toPagedResponse
+import th.ac.kmitl.it.rmtrs.util.toReservationWithDetail
 
 @Service
 class AccountService(val accountRepository: AccountRepository) {
@@ -44,4 +49,10 @@ class AccountService(val accountRepository: AccountRepository) {
             = accountRepository.findById(id)
             .map { accountRepository.softDelete(it.id) }
             .orElseThrow { ResourceNotFoundException("Account not found.") }
+
+    fun getPaged(page: Int, size: Int): PagedResponse<Account> {
+        val pagedRes = PageRequest.of(page, size, Sort.Direction.DESC, "createAt")
+                .let { accountRepository.findAll(it) }
+        return toPagedResponse(pagedRes, pagedRes.content)
+    }
 }

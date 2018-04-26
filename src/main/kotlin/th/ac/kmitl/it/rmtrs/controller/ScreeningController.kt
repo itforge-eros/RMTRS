@@ -47,7 +47,7 @@ class ScreeningController(val screeningService: ScreeningService) {
     }
 
     @GetMapping("paged")
-    fun getPagedMovies(@RequestParam(value = "page", defaultValue = "0") page: Int): ResponseEntity<PagedResponse<Map<String, Any>>> {
+    fun getPaged(@RequestParam(value = "page", defaultValue = "0") page: Int): ResponseEntity<PagedResponse<Map<String, Any>>> {
         return ResponseEntity.ok(screeningService.getPaged(page, PagedResponse.PAGE_SIZE))
     }
 
