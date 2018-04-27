@@ -38,4 +38,7 @@ class ActorService(val repository: ActorRepository) {
             .map { repository.softDelete(it.id) }
             .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
 
+    fun checkIfExisted(id: Long)
+            = repository.findById(id)
+            .orElseThrow { ResourceNotFoundException("Actor id: ${id} not found.") }
 }

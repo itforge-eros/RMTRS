@@ -52,7 +52,7 @@ class AccountService(val accountRepository: AccountRepository) {
 
     fun getPaged(page: Int, size: Int): PagedResponse<Account> {
         val pagedRes = PageRequest.of(page, size, Sort.Direction.DESC, "createAt")
-                .let { accountRepository.findAll(it) }
+                .let { accountRepository.findAll(it).onEach { it.password = "--------" } }
         return toPagedResponse(pagedRes, pagedRes.content)
     }
 }

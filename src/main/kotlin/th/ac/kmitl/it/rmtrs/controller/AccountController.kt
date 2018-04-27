@@ -1,5 +1,6 @@
 package th.ac.kmitl.it.rmtrs.controller
 
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import th.ac.kmitl.it.rmtrs.model.Account
@@ -29,8 +30,9 @@ class AccountController(val accountService: AccountService) {
     }
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable("id") id: Long) {
-
+    fun delete(@PathVariable("id") id: Long): ResponseEntity<Void> {
+        accountService.delete(id)
+        return ResponseEntity(HttpStatus.OK)
     }
 
     @GetMapping("/{id}")

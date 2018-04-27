@@ -31,9 +31,15 @@ class MovieController(val movieService: MovieService) {
         val date = validateDate(dateStr)
         return ResponseEntity.ok(movieService.getByDate(id, date))
     }
+
     @PostMapping
     fun add(@Valid @RequestBody req: MovieRequest)
             = ResponseEntity.ok().body(movieService.add(req))
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable("id") id: Long, @RequestBody req: MovieRequest): ResponseEntity<Map<String, Any>> {
+        return ResponseEntity.ok(movieService.update(req, id))
+    }
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable("id") id: Long): ResponseEntity<Void> {

@@ -38,4 +38,7 @@ class DirectorService(val repository: DirectorRepository) {
             .map { repository.softDelete(it.id) }
             .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
 
+    fun checkIfExisted(id: Long)
+            = repository.findById(id)
+            .orElseThrow { ResourceNotFoundException("Director id: ${id} not found.") }
 }

@@ -40,4 +40,7 @@ class ProductionService(val repository: ProductionRepository) {
             .map { repository.softDelete(it.id) }
             .orElseThrow { ResourceNotFoundException("$modelName id: $id not found.") }
 
+    fun checkIfExisted(id: Long)
+            = repository.findById(id)
+            .orElseThrow { ResourceNotFoundException("Production id: ${id} not found.") }
 }

@@ -17,7 +17,13 @@ import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
 @Service
-class MovieService(val movieRepository: MovieRepository) {
+class MovieService(
+        val movieRepository: MovieRepository,
+        val genreService: GenreService,
+        val actorService: ActorService,
+        val productionService: ProductionService,
+        val directorService: DirectorService
+) {
 
     @PersistenceContext
     lateinit var em: EntityManager
@@ -40,17 +46,28 @@ class MovieService(val movieRepository: MovieRepository) {
 
     fun add(req: MovieRequest)
             = movieRepository.save(req.toModel().apply {
-                req.actors.forEach { id -> this.actors.add(em.getReference(Actor::class.java, id)) }
-                req.directors.forEach { id -> this.directors.add(em.getReference(Director::class.java, id)) }
-                req.genres.forEach { id -> this.genres.add(em.getReference(Genre::class.java, id)) }
-                req.productions.forEach { id -> this.productions.add(em.getReference(Production::class.java, id)) }
+                req.actors.forEach { id -> this.actors.add(actorService.checkIfExisted(id)) }
+                req.directors.forEach { id -> this.directors.add(directorService.checkIfExisted(id)) }
+                req.genres.forEach { id -> this.genres.add(genreService.checkIfExisted(id)) }
+                req.productions.forEach { id -> this.productions.add(productionService.checkIfExisted(id)) }
             }).toMovieWithDetail()
 
-    fun update(req: MovieRequest, id: Long) {
+    fun update(req: MovieRequest, id: Long): Map<String, Any> {
         val movie = checkIfExisted(id)
-        return req.toModel()
-                .apply { this.id = movie.id }
-                .let { movieRepository.save(it).toMovieWithDetail() }
+        movie.actors.addAll(req.actors.map { movieId -> actorService.checkIfExisted(movieId) })
+        movie.directors.addAll(req.directors.map { dId -> directorService.checkIfExisted(dId) })
+        movie.genres.addAll(req.genres.map { gId -> genreService.checkIfExisted(gId) })
+        movie.productions.addAll(req.productions.map { pId -> productionService.checkIfExisted(pId) })
+        movie.th_title = req.th_title
+        movie.en_title = req.en_title
+        movie.synopsis = req.synopsis
+        movie.duration = req.duration
+        movie.posterUrl = req.posterUrl
+        movie.trailerUrl = req.trailerUrl
+        movie.releaseDate = req.releaseDate
+        movie.endDate = req.endDate
+        movie.rate = req.rate
+        return movieRepository.save(movie).toMovieWithDetail()
     }
 
     fun delete(id: Long)
