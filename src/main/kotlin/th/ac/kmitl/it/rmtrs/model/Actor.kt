@@ -16,7 +16,6 @@ data class Actor(
         @NotNull
         var fname: String = "default",
 
-        @NotNull
         var mname: String = "default",
 
         @NotNull
