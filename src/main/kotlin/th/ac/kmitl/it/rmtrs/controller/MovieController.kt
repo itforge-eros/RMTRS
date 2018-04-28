@@ -7,8 +7,10 @@ import th.ac.kmitl.it.rmtrs.model.Movie
 import th.ac.kmitl.it.rmtrs.payload.MovieRequest
 import th.ac.kmitl.it.rmtrs.payload.PagedResponse
 import th.ac.kmitl.it.rmtrs.service.MovieService
+import th.ac.kmitl.it.rmtrs.util.toMovieWithDetail
 import th.ac.kmitl.it.rmtrs.util.validateDate
 import javax.validation.Valid
+import javax.xml.ws.Response
 
 @RestController
 @RequestMapping("/movie")
@@ -23,13 +25,18 @@ class MovieController(val movieService: MovieService) {
                 .let { ResponseEntity.ok(it) }
     }
 
-    @GetMapping("/{id}")
-    fun get(
+    @GetMapping("/available/{id}")
+    fun getAvailableById(
             @PathVariable("id") id: Long,
             @RequestParam(value = "date", defaultValue = "none") dateStr: String
     ): ResponseEntity<Map<String, Any>> {
         val date = validateDate(dateStr)
         return ResponseEntity.ok(movieService.getByDate(id, date))
+    }
+
+    @GetMapping("/{id}")
+    fun get(@PathVariable("id") id: Long): ResponseEntity<Map<String, Any>> {
+        return ResponseEntity.ok(movieService.checkIfExisted(id).toMovieWithDetail())
     }
 
     @PostMapping
