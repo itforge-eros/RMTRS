@@ -1,13 +1,11 @@
 package th.ac.kmitl.it.rmtrs.service
 
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import th.ac.kmitl.it.rmtrs.exception.ResourceNotFoundException
 import th.ac.kmitl.it.rmtrs.exception.ScreeningTimeConflict
 import th.ac.kmitl.it.rmtrs.model.Movie
-import th.ac.kmitl.it.rmtrs.model.Screening
 import th.ac.kmitl.it.rmtrs.model.Theatre
 import th.ac.kmitl.it.rmtrs.payload.PagedResponse
 import th.ac.kmitl.it.rmtrs.payload.ScreeningRequest
@@ -45,7 +43,9 @@ class ScreeningService(
                     this.theatre = em.getReference(Theatre::class.java, req.theatreId)
                 }
         return screeningRepository.save(screening)
-                .also { firebaseService.createScreening(screeningId = it.id) }
+                .also {
+                    firebaseService.createScreening(screeningId = it.id)
+                }
                 .toScreeningWithDetail()
     }
 
