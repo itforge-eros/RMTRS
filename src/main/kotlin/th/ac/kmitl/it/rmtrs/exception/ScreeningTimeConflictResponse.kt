@@ -6,5 +6,5 @@ import java.time.LocalDateTime
 class ScreeningTimeConflictResponse(
         val timestamp: String = LocalDateTime.now().toString(),
         val message: String,
-        val screening: Screening
+        val screening: Map<String, Any>
 )

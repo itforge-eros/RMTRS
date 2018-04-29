@@ -38,7 +38,7 @@ class ScreeningService(
             = checkIfExisted(id).toScreeningWithDetail()
 
     fun add(req: ScreeningRequest): Map<String, Any> {
-        val movie = validateScreeningConflict(req)
+        val movie = validateScreeningConflict(req, null)
         val screening = req.toModel()
                 .apply {
                     this.movie = movie
@@ -50,7 +50,7 @@ class ScreeningService(
     }
 
     fun update(req: ScreeningRequest, id: Long): Map<String, Any> {
-        val movie = validateScreeningConflict(req)
+        val movie = validateScreeningConflict(req, id)
         val screening = checkIfExisted(id)
         req.toModel()
                 .apply { this.id = screening.id }
@@ -65,9 +65,12 @@ class ScreeningService(
     fun delete(id: Long)
             = checkIfExisted(id).let { screeningRepository.softDelete(id) }
 
-    private fun validateScreeningConflict(req: ScreeningRequest): Movie {
+    private fun validateScreeningConflict(req: ScreeningRequest, excludeId: Long?): Movie {
         val movie = movieService.checkIfExisted(req.movieId)
-        val allScreeningsInTheatre = screeningRepository.findAllByTheatreId(req.theatreId, req.showDate)
+        var allScreeningsInTheatre = screeningRepository.findAllByTheatreId(req.theatreId, req.showDate)
+        if (excludeId != null) {
+            allScreeningsInTheatre = allScreeningsInTheatre.filter { it.id != excludeId }
+        }
         allScreeningsInTheatre
                 .sortedBy { it.showTime }
                 .forEach { if(isOverlap(
@@ -75,7 +78,7 @@ class ScreeningService(
                                 req.showTime,
                                 it.showTime.plusMinutes(movie.duration.toLong()),
                                 req.showTime.plusMinutes(movie.duration.toLong())))
-                    throw ScreeningTimeConflict("Screening time conflict with ${it.id}", it)
+                    throw ScreeningTimeConflict("Screening time conflict with ${it.id}", it.toScreeningWithDetail())
                 }
         return movie
     }

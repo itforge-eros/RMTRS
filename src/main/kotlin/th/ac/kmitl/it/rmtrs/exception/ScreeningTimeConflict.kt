@@ -7,4 +7,4 @@ import java.time.LocalDateTime
 import java.util.*
 
 @ResponseStatus(value = HttpStatus.CONFLICT)
-class ScreeningTimeConflict(message: String, val screening: Screening) : RuntimeException(message)
+class ScreeningTimeConflict(message: String, val screening: Map<String, Any>) : RuntimeException(message)
