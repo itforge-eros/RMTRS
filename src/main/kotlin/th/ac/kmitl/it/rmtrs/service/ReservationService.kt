@@ -45,7 +45,7 @@ class ReservationService(
 
     fun checkIn(id: Long): Map<String, Any> {
         val reservation = checkIfExisted(id)
-        reservation.isCheckedIn = true
+        reservation.isCheckedIn = !reservation.isCheckedIn
         reservation.checkedInTime = LocalDateTime.now()
         return reservationRepository.save(reservation).toReservationWithDetail()
     }

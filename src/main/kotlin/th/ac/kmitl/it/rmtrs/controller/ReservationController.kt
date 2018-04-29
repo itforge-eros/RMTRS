@@ -22,7 +22,7 @@ class ReservationController(val reservationService: ReservationService) {
     fun get(@PathVariable("id") id: Long)
             = ResponseEntity.ok(reservationService.checkIfExisted(id).toReservationWithDetail())
 
-    @GetMapping("checkin/{id}")
+    @GetMapping("/checkin/{id}")
     fun checkIn(@PathVariable("id") id: Long)
             = reservationService.checkIn(id)
 
