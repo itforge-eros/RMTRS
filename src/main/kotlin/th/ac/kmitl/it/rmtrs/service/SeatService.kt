@@ -16,7 +16,6 @@ class SeatService(val seatRepository: SeatRepository, val seatTypeService: SeatT
 
     fun add(req: SeatRequest): Map<String, Any> {
         val seat = Seat(row = req.row, number = req.number)
-        seat.theatre = theatreService.checkIfExisted(req.theatreId)
         seat.seatType = seatTypeService.checkIfExisted(req.seatTypeId)
         return seatRepository.save(seat).toSeatWithDetail()
     }
@@ -24,8 +23,8 @@ class SeatService(val seatRepository: SeatRepository, val seatTypeService: SeatT
     fun update(id: Long, req: SeatRequest): Map<String, Any> {
         val seat = checkIfExisted(id)
         val newSeat = seat.copy(row = req.row, number = req.number)
+        newSeat.theatre = seat.theatre
         newSeat.seatType = seatTypeService.checkIfExisted(req.seatTypeId)
-        newSeat.theatre = theatreService.checkIfExisted(req.theatreId)
         return seatRepository.save(newSeat).toSeatWithDetail()
     }
 

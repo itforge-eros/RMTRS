@@ -6,9 +6,6 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Positive
 
 data class SeatRequest(
-        @JsonProperty("theatre_id")
-        @field:NotNull
-        val theatreId: Long,
         @field:NotNull
         @JsonProperty("seat_type_id")
         val seatTypeId: Long,

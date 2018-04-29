@@ -5,6 +5,8 @@ import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import th.ac.kmitl.it.rmtrs.exception.ResourceNotFoundException
 import th.ac.kmitl.it.rmtrs.model.Movie
+import th.ac.kmitl.it.rmtrs.model.Seat
+import th.ac.kmitl.it.rmtrs.model.SeatType
 import th.ac.kmitl.it.rmtrs.model.Theatre
 import th.ac.kmitl.it.rmtrs.payload.PagedResponse
 import th.ac.kmitl.it.rmtrs.payload.TheatreRequest
@@ -13,14 +15,25 @@ import th.ac.kmitl.it.rmtrs.util.toPagedResponse
 import th.ac.kmitl.it.rmtrs.util.toTheatreWithDetail
 
 @Service
-class TheatreService(val theatreRepository: TheatreRepository) {
+class TheatreService(val theatreRepository: TheatreRepository, val seatTypeService: SeatTypeService) {
 
     val modelName = "Theatre"
+
+    val seatTypeMap = HashMap<Long, SeatType>()
 
     fun get(id: Long) = checkIfExisted(id).toTheatreWithDetail()
 
     fun add(req: TheatreRequest): Map<String, Any> {
         val theatre = Theatre(name = req.name)
+        theatre.seats.addAll(req.seats.map {
+            val seat = Seat(row = it.row, number = it.number)
+            if (!seatTypeMap.containsKey(it.seatTypeId)) {
+                seatTypeMap.set(it.seatTypeId, seatTypeService.checkIfExisted(it.seatTypeId))
+            }
+            seat.seatType = seatTypeMap[it.seatTypeId]!!
+            seat.theatre = theatre
+            seat
+        })
         return theatreRepository.save(theatre).toTheatreWithDetail()
     }
 
