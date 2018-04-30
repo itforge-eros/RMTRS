@@ -5,6 +5,6 @@ data class PagedResponse<T> (
     var data: List<T> = emptyList()
 ) {
     companion object {
-        const val PAGE_SIZE = 5
+        const val PAGE_SIZE = 50
     }
 }
