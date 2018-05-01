@@ -54,6 +54,10 @@ class MovieService(
 
     fun update(req: MovieRequest, id: Long): Map<String, Any> {
         val movie = checkIfExisted(id)
+        movie.actors.clear()
+        movie.directors.clear()
+        movie.genres.clear()
+        movie.productions.clear()
         movie.actors.addAll(req.actors.map { movieId -> actorService.checkIfExisted(movieId) })
         movie.directors.addAll(req.directors.map { dId -> directorService.checkIfExisted(dId) })
         movie.genres.addAll(req.genres.map { gId -> genreService.checkIfExisted(gId) })
