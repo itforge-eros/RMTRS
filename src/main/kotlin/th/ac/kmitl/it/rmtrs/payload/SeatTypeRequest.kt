@@ -8,6 +8,5 @@ data class SeatTypeRequest(
         val name: String,
         @field:PositiveOrZero
         val price: Double,
-        @field:NotBlank
         val description: String
 )
